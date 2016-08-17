@@ -1,0 +1,29 @@
+{
+  "name": "nos-pdf",
+  "version": "1.0.0",
+  "description": "Pdf module for IBI Data's Node Starter",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/IBIData/nos-pdf.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "IBI Data",
+    "email": "admin@ibidata.com",
+    "url": "http://www.ibidata.com"
+  },
+  "contributors": [
+    {
+      "name": "Justin Williamson",
+      "email": "jwilliamson@ibidata.com"
+    }
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "xfdf": "^0.2.0"
+  }
+}
