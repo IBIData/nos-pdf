@@ -35,12 +35,12 @@ module.exports = {
 
         let options = extend({
             src: null,
-            dest: `./modules/tmp/${Date.now()}.pdf`,
+            dest: `./tmp/${Date.now()}.pdf`,
             data: null,
             flatten: true
         }, userOptions);
 
-        let tempXfdfFile = `./modules/tmp/${Date.now()}.xfdf`;
+        let tempXfdfFile = `./tmp/${Date.now()}.xfdf`;
         let flatten = options.flatten ? 'flatten' : '';
 
         return fs.writeFileAsync(tempXfdfFile, module.exports.generateXfdf(options.data))
@@ -54,11 +54,17 @@ module.exports = {
             })
 
             .then(() => {
+
                 let returnFile;
+
                 return fs.readFileAsync(options.dest)
                     .then(file => {
                         returnFile = file;
-                        return fs.unlinkAsync(options.dest);
+                        if (userOptions.dest) {
+                            return null;
+                        } else {
+                            return fs.unlinkAsync(options.dest);
+                        }
                     })
                     .then(() => {
                         if (cb) return cb(null, returnFile);
@@ -79,17 +85,40 @@ module.exports = {
 
 
     // STAMP ONE PDF ONTO ANOTHER
-    stamp: (sourceFile, stampFile, destFile, flatten, cb) => {
+    stamp: (userOptions, cb) => {
 
-        let flatArg = flatten ? ' flatten' : '';
+        let options = extend({
+            src: null,
+            stampFile: null,
+            dest: `./tmp/${Date.now()}.pdf`,
+            flatten: true
+        }, userOptions);
 
-        return cp.execAsync(`pdftk ${sourceFile} stamp ${stampFile} output ${destFile}${flatArg}`)
+        let flatten = options.flatten ? 'flatten' : '';
+
+        return cp.execAsync(`pdftk ${options.src} stamp ${options.stampFile} output ${options.dest} ${flatten}`)
 
             .then((stdout, stderr) => {
-                if (cb) {
-                    return cb(null);
-                }
-                else return null;
+
+                let returnFile;
+
+                return fs.readFileAsync(options.dest)
+                    .then(file => {
+                        returnFile = file;
+                        if (userOptions.dest) {
+                            return null;
+                        } else {
+                            return fs.unlinkAsync(options.dest);
+                        }
+                    })
+                    .then(() => {
+                        if (cb) return cb(null, returnFile);
+                        else return returnFile;
+                    })
+                    .catch(err => {
+                        if (cb) return cb(err);
+                        else throw err;
+                    });
             })
 
             .catch(err => {

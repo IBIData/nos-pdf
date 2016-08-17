@@ -62,15 +62,34 @@ app.get(`${config.site.url}/example.pdf`, (req, res, next) => {
 });
 ```
 
-##Options
-
-- **src** <String> - The path to your PDF template.
-- **data** <Object> - JSON object with data to fill PDF form.
-- **flatten** <Boolean> - Flatten PDF. This makes it uneditable. If you select false, it will be editable in the browser.
-
 
 ##Methods
 
 - **fillForm**
+
+> Fills PDF forms
+
+    - *Arguments*
+        - options <Object>
+            - src <String> (null) - The path to your PDF template.
+            - dest <String> (null) - Destination path of newly created PDF. If omitted, file will only be sent to browser, not saved.
+            - data <Object> (null) - JSON object with data to fill PDF form.
+            - flatten <Boolean> (true) - Flatten PDF. This makes it uneditable. If you select false, it will be editable in the browser.
+
 - **stamp**
+
+> Stamp one PDF onto another.
+
+    - *Arguments*
+        - options <Object>
+            - src <String> (null) - The path to your PDF to be stamped.
+            - stampFile <String> (null) - The path to your PDF that you wish to stamp on the src (works best as transparent).
+            - data <Object> (null) - JSON object with data to fill PDF form.
+            - flatten <Boolean> (true) - Flatten PDF. This makes it uneditable. If you select false, it will be editable in the browser.
+
 - **generateXfdf**
+
+> Transform JSON object into XFDF file.
+
+    - *Arguments*
+        - data <Object> - JSON object you wish to convert to Xfdf file.
