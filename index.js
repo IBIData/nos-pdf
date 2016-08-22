@@ -5,6 +5,8 @@ const cp = Promise.promisifyAll(require('child_process'));
 const fs = Promise.promisifyAll(require('fs'));
 const Xfdf = require('xfdf');
 
+const localDir = `${__dirname}/tmp`;
+
 let extend = (defaults, options) => {
     let extended = {};
     let prop;
@@ -35,12 +37,12 @@ module.exports = {
 
         let options = extend({
             src: null,
-            dest: `./tmp/${Date.now()}.pdf`,
+            dest: `${localDir}/${Date.now()}.pdf`,
             data: null,
             flatten: true
         }, userOptions);
 
-        let tempXfdfFile = `./tmp/${Date.now()}.xfdf`;
+        let tempXfdfFile = `${localDir}/${Date.now()}.xfdf`;
         let flatten = options.flatten ? 'flatten' : '';
 
         return fs.writeFileAsync(tempXfdfFile, module.exports.generateXfdf(options.data))
@@ -90,7 +92,7 @@ module.exports = {
         let options = extend({
             src: null,
             stampFile: null,
-            dest: `./tmp/${Date.now()}.pdf`,
+            dest: `${localDir}/${Date.now()}.pdf`,
             flatten: true
         }, userOptions);
 
