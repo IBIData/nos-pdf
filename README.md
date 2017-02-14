@@ -1,13 +1,13 @@
-#Nos-PDF
+# Nos-PDF
 
 Authored by IBI Data
 
-##Usage
+## Usage
 
 The PDF module can be used with callbacks or promises. No special setup required.
 
 
-###Callbacks
+### Callbacks
 
 ```javascript
 app.get(`${config.site.url}/example.pdf`, (req, res, next) => {
@@ -33,7 +33,7 @@ app.get(`${config.site.url}/example.pdf`, (req, res, next) => {
 
 ```
 
-###Promises
+### Promises
 ```javascript
 app.get(`${config.site.url}/example.pdf`, (req, res, next) => {
 
@@ -63,7 +63,7 @@ app.get(`${config.site.url}/example.pdf`, (req, res, next) => {
 ```
 
 
-##Methods
+## Methods
 
 - **fillForm**
 

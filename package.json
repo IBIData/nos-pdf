@@ -1,6 +1,6 @@
 {
   "name": "nos-pdf",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Pdf module for IBI Data's Node Starter",
   "main": "index.js",
   "repository": {
@@ -23,7 +23,7 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "bluebird": "^3.4.1",
+    "bluebird": "^3.4.7",
     "xfdf": "^0.2.0"
   }
 }

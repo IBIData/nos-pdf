@@ -7,8 +7,8 @@ const Xfdf = require('xfdf');
 
 const localDir = `${__dirname}/tmp`;
 
-let extend = (defaults, options) => {
-    let extended = {};
+const extend = (defaults, options) => {
+    const extended = {};
     let prop;
     for (prop in defaults) {
         if (Object.prototype.hasOwnProperty.call(defaults, prop)) {
@@ -26,34 +26,29 @@ let extend = (defaults, options) => {
 
 module.exports = {
 
-    generateXfdf: (data) => {
-        return new Xfdf().fromJSON({
-            fields: data
-        }).generate();
-    },
+    generateXfdf: data =>
+        new Xfdf().fromJSON({
+            fields: data,
+        }).generate(),
 
     // FILL PDF FORMS
     fillForm: (userOptions, cb) => {
 
-        let options = extend({
+        const options = extend({
             src: null,
             dest: `${localDir}/${Date.now()}.pdf`,
             data: null,
-            flatten: true
+            flatten: true,
         }, userOptions);
 
-        let tempXfdfFile = `${localDir}/${Date.now()}.xfdf`;
-        let flatten = options.flatten ? 'flatten' : '';
+        const tempXfdfFile = `${localDir}/${Date.now()}.xfdf`;
+        const flatten = options.flatten ? 'flatten' : '';
 
         return fs.writeFileAsync(tempXfdfFile, module.exports.generateXfdf(options.data))
 
-            .then(() => {
-                return cp.execAsync(`pdftk ${options.src} fill_form ${tempXfdfFile} output ${options.dest} ${flatten}`);
-            })
+            .then(() => cp.execAsync(`pdftk ${options.src} fill_form ${tempXfdfFile} output ${options.dest} ${flatten}`))
 
-            .then(() => {
-                return fs.unlinkAsync(tempXfdfFile);
-            })
+            .then(() => fs.unlinkAsync(tempXfdfFile))
 
             .then(() => {
 
@@ -62,25 +57,22 @@ module.exports = {
                 return fs.readFileAsync(options.dest)
                     .then(file => {
                         returnFile = file;
-                        if (userOptions.dest) {
-                            return null;
-                        } else {
-                            return fs.unlinkAsync(options.dest);
-                        }
+                        if (userOptions.dest) return null;
+                        return fs.unlinkAsync(options.dest);
                     })
                     .then(() => {
                         if (cb) return cb(null, returnFile);
-                        else return returnFile;
+                        return returnFile;
                     })
                     .catch(err => {
                         if (cb) return cb(err);
-                        else throw err;
+                        throw err;
                     });
             })
 
             .catch(err => {
                 if (cb) return cb(err);
-                else throw err;
+                throw err;
             });
 
     },
@@ -89,18 +81,18 @@ module.exports = {
     // STAMP ONE PDF ONTO ANOTHER
     stamp: (userOptions, cb) => {
 
-        let options = extend({
+        const options = extend({
             src: null,
             stampFile: null,
             dest: `${localDir}/${Date.now()}.pdf`,
-            flatten: true
+            flatten: true,
         }, userOptions);
 
-        let flatten = options.flatten ? 'flatten' : '';
+        const flatten = options.flatten ? 'flatten' : '';
 
         return cp.execAsync(`pdftk ${options.src} stamp ${options.stampFile} output ${options.dest} ${flatten}`)
 
-            .then((stdout, stderr) => {
+            .then(() => {
 
                 let returnFile;
 
@@ -109,28 +101,26 @@ module.exports = {
                         returnFile = file;
                         if (userOptions.dest) {
                             return null;
-                        } else {
-                            return fs.unlinkAsync(options.dest);
                         }
+                        return fs.unlinkAsync(options.dest);
                     })
                     .then(() => {
                         if (cb) return cb(null, returnFile);
-                        else return returnFile;
+                        return returnFile;
                     })
                     .catch(err => {
                         if (cb) return cb(err);
-                        else throw err;
+                        throw err;
                     });
             })
 
             .catch(err => {
                 if (cb) {
                     return cb(err);
-                } else {
-                    throw err;
                 }
+                throw err;
             });
 
-    }
+    },
 
 };
