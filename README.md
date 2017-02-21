@@ -65,31 +65,86 @@ app.get(`${config.site.url}/example.pdf`, (req, res, next) => {
 
 ## Methods ##
 
-- **fillForm**
+### fillForm ###
 
 > Fills PDF forms
 
-    - *Arguments*
-        - options <Object>
-            - src <String> (null) - The path to your PDF template.
-            - dest <String> (null) - Destination path of newly created PDF. If omitted, file will only be sent to browser, not saved.
-            - data <Object> (null) - JSON object with data to fill PDF form.
-            - flatten <Boolean> (true) - Flatten PDF. This makes it uneditable. If you select false, it will be editable in the browser.
+#### Arguments ####
 
-- **stamp**
+**options** {Object}
 
-> Stamp one PDF onto another.
+- **options.src** {String} *null*
 
-    - *Arguments*
-        - options <Object>
-            - src <String> (null) - The path to your PDF to be stamped.
-            - stampFile <String> (null) - The path to your PDF that you wish to stamp on the src (works best as transparent).
-            - data <Object> (null) - JSON object with data to fill PDF form.
-            - flatten <Boolean> (true) - Flatten PDF. This makes it uneditable. If you select false, it will be editable in the browser.
+    - The path to your PDF template
 
-- **generateXfdf**
+- **options.dest** {String} *null*
+
+    - Destination path of newly created PDF. If omitted, file will only be sent to browser, not saved.
+
+- **options.data** {Object} *null*
+
+    - Data to fill PDF form.
+
+- **options.flatten** {Boolean} *true*
+
+    - Flatten PDF. This makes it uneditable. If you select false, it may be editable in the browser.
+
+### stamp ###
+
+> Stamp one PDF onto another (stamps all pages)
+
+#### Arguments ####
+
+**options** {Object}
+
+- **options.src** {String} *null*
+
+    - The path to your PDF to be stamped
+
+- **options.stampFile** {String} *null*
+
+    - The path to your PDF that you wish to stamp on the src (works best as transparent)
+
+- **options.dest** {String} *null*
+
+    - Destination path of newly created PDF. If omitted, file will only be sent to browser, not saved.
+
+- **options.flatten** {Boolean} *true*
+
+    - Flatten PDF. This makes it uneditable. If you select false, it will be editable in the browser.
+
+### multiStamp ###
+
+> Stamp one PDF onto another (stamps each page to corresponding page of input PDF)
+
+#### Arguments ####
+
+**options** {Object}
+
+- **options.src** {String} *null*
+
+    - The path to your PDF to be stamped
+
+- **options.stampFile** {String} *null*
+
+    - The path to your PDF that you wish to stamp on the src (works best as transparent)
+
+- **options.dest** {String} *null*
+
+    - Destination path of newly created PDF. If omitted, file will only be sent to browser, not saved.
+
+- **options.flatten** {Boolean} *true*
+
+    - Flatten PDF. This makes it uneditable. If you select false, it will be editable in the browser.
+
+
+
+### generateXfdf ###
 
 > Transform JSON object into XFDF file.
 
-    - *Arguments*
-        - data <Object> - JSON object you wish to convert to Xfdf file.
+#### Arguments ####
+
+**data** {Object} *null*
+
+    - Data to convert to XFDF file
