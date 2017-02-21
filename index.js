@@ -31,7 +31,10 @@ module.exports = {
             fields: data,
         }).generate(),
 
-    // FILL PDF FORMS
+    /**
+     * Fill PDF Forms
+     * SEE https: //www.pdflabs.com/docs/pdftk-man-page/#dest-op-fill-form
+     */
     fillForm: (userOptions, cb) => {
 
         const options = extend({
@@ -78,7 +81,10 @@ module.exports = {
     },
 
 
-    // STAMP ONE PDF ONTO ANOTHER
+    /**
+     * Stamp one PDF onto another (all pages)
+     * SEE https: //www.pdflabs.com/docs/pdftk-man-page/#dest-op-stamp
+     */
     stamp: (userOptions, cb) => {
 
         const options = extend({
@@ -91,6 +97,54 @@ module.exports = {
         const flatten = options.flatten ? 'flatten' : '';
 
         return cp.execAsync(`pdftk ${options.src} stamp ${options.stampFile} output ${options.dest} ${flatten}`)
+
+            .then(() => {
+
+                let returnFile;
+
+                return fs.readFileAsync(options.dest)
+                    .then(file => {
+                        returnFile = file;
+                        if (userOptions.dest) {
+                            return null;
+                        }
+                        return fs.unlinkAsync(options.dest);
+                    })
+                    .then(() => {
+                        if (cb) return cb(null, returnFile);
+                        return returnFile;
+                    })
+                    .catch(err => {
+                        if (cb) return cb(err);
+                        throw err;
+                    });
+            })
+
+            .catch(err => {
+                if (cb) {
+                    return cb(err);
+                }
+                throw err;
+            });
+
+    },
+
+    /**
+     * Stamp one PDF onto another (each page)
+     * SEE https: //www.pdflabs.com/docs/pdftk-man-page/#dest-op-multistamp
+     */
+    multiStamp: (userOptions, cb) => {
+
+        const options = extend({
+            src: null,
+            stampFile: null,
+            dest: `${localDir}/${Date.now()}.pdf`,
+            flatten: true,
+        }, userOptions);
+
+        const flatten = options.flatten ? 'flatten' : '';
+
+        return cp.execAsync(`pdftk ${options.src} multistamp ${options.stampFile} output ${options.dest} ${flatten}`)
 
             .then(() => {
 
